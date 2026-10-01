@@ -1,0 +1,31 @@
+#header{
+    background-color: blue;
+    height: 70px;
+}
+
+#main-contain{
+    background-color: yellow;
+    height: 600px;
+}
+
+#main-contain #content-area{
+    background-color: skyblue;
+    height: 100px;
+}
+
+#main-contain #content-area + #sidebar{
+    background-color: red;
+   width: 30%;
+}
+
+#footer{
+    background-color: black;
+}
+
+#sidebar{
+    display: flex;
+    flex-direction:  column;
+    gap: 50px;
+   justify-content: center;
+    
+}

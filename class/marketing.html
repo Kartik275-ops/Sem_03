@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3 Frame Layout</title>
+</head>
+<style>
+            body{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+
+            }
+            .menu a:hover{
+                background: #555;
+
+            }
+
+            table{
+                border-collapse: collapse;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            th,td{
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+
+            th{
+                background: #f0f0f0;
+            }
+
+            button{
+                padding: 6px 12px;
+                background: #007bff;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+
+            }
+
+            .book-button:hover{
+                background: #0056b3;
+            }
+
+            .book-btn:hover{
+                background: #0056b3;
+            }
+
+            .cart-button:hover{
+                background: #28a745;
+            }
+
+            .cart-btn:hover{
+                background: #28a745;
+            }
+
+            footer{
+                background: #f0f0f0;
+                padding: 10px;
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .location-btn{
+                padding: 6px 12px;
+                background: #28a745;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+            .location-btn:hover{
+                background: #28a745;
+            }
+
+
+
+
+
+</style>
+<body>
+
+    <!-- Main Outer Box -->
+    <table border="1" width="800" height="400" cellpadding="10" cellspacing="0">
+        
+        <!-- Frame 1: Top Horizontal Menu -->
+        <tr>
+            <td colspan="2" height="40">
+                <b>Menu:</b> &nbsp;&nbsp;
+                <a href="#">Home</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="#">Subject</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="#">Payment</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <a href="#">Login</a>
+            </td>
+        </tr>
+
+        <tr>
+            <!-- Frame 2: Main Content (Subject Table) -->
+            <td width="75%" valign="top">
+                <h3></h3>
+                <table border="1" width="100%" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Subject</th>
+                        <th>Price</th>
+                        <th>Book</th>
+                        <th>Add to Cart</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Physics</td>
+                        <td>350</td>
+                        <td>1</td>
+                        <td><button class="book-btn">clickme</button></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Chemistry</td>
+                        <td>450</td>
+                        <td>2</td>
+                        <td><button class="book-btn">clickme</button></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Biology</td>
+                        <td>200</td>
+                        <td>3</td>
+                        <td><button class="book-btn">clickme</button></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Maths</td>
+                        <td>300</td>
+                        <td>4</td>
+                        <td><button class="book-btn">clickme</button></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Engineering</td>
+                        <td>400</td>
+                        <td>5</td>
+                        <td><button class="book-btn">clickme</button></td>
+                    </tr>
+                </table>
+            </td>
+
+            <!-- Frame 3: Side Panel (Patla Frame) -->
+            <td width="25%" valign="top">
+                <h3>text</h3>
+                <p>This is the text inside the third frame right next to Frame 2.</p>
+            </td>
+        </tr>
+
+    </table>
+
+</body>
+</html>

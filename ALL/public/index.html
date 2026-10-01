@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Node.js FSD Activity</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f6f7fb;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        button {
+            margin: 4px 6px 4px 0;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        pre {
+            background: #111;
+            color: #7fffa0;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            min-height: 20px;
+            white-space: pre-wrap;
+        }
+
+        #log {
+            background: #222;
+            color: #ddd;
+            font-size: 13px;
+            padding: 10px;
+            border-radius: 6px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <h1>Node.js FSD Activity</h1>
+
+
+    <!-- 1. EventEmitter -->
+
+    <section>
+
+        <h2>1. Custom EventEmitter</h2>
+
+        <input
+            id="nameInput"
+            placeholder="Your name"
+            value="Student"
+        >
+
+        <button onclick="callGreet()">
+            Trigger "greet"
+        </button>
+
+        <button onclick="callExit()">
+            Trigger "exit"
+        </button>
+
+        <pre id="emitterOutput"></pre>
+
+    </section>
+
+
+    <!-- 2. DOM Events -->
+
+    <section>
+
+        <h2>2. DOM-like Event Handling</h2>
+
+        <button id="domBtn">
+            Click me
+        </button>
+
+        <pre id="domOutput"></pre>
+
+    </section>
+
+
+    <!-- 3. Event Loop -->
+
+    <section>
+
+        <h2>3. Event Loop Demo</h2>
+
+        <button onclick="runEventLoop()">
+            Run Event Loop Demo
+        </button>
+
+        <pre id="eventLoopOutput"></pre>
+
+    </section>
+
+
+    <!-- 4. File CRUD -->
+
+    <section>
+
+        <h2>4. File CRUD (fs module)</h2>
+
+        <input
+            id="fileText"
+            placeholder="Text for the file"
+        >
+
+        <br><br>
+
+        <button onclick="createFile()">
+            Create
+        </button>
+
+        <button onclick="readFile()">
+            Read
+        </button>
+
+        <button onclick="updateFile()">
+            Update
+        </button>
+
+        <button onclick="deleteFile()">
+            Delete
+        </button>
+
+        <pre id="fileOutput"></pre>
+
+    </section>
+
+
+    <!-- 5. Request Log -->
+
+    <section>
+
+        <h2>Live Request Log</h2>
+
+        <div id="log">
+            Waiting for actions...
+        </div>
+
+    </section>
+
+
+
+    <script>
+
+        // Get the log box
+        const logBox =
+            document.getElementById('log');
+
+
+        // =====================================
+        // LOG FUNCTION
+        // =====================================
+
+        function log(message) {
+
+            const time =
+                new Date().toLocaleTimeString();
+
+
+            logBox.innerHTML =
+                `[${time}] ${message}<br>` +
+                logBox.innerHTML;
+
+        }
+
+
+
+        // =====================================
+        // DISPLAY SERVER RESPONSE
+        // =====================================
+
+        async function handleResponse(res, outputId) {
+
+            const data =
+                await res.json();
+
+
+            document
+                .getElementById(outputId)
+                .textContent =
+                    JSON.stringify(data, null, 2);
+
+
+            return data;
+
+        }
+
+
+
+        // =====================================
+        // 1. GREET EVENT
+        // =====================================
+
+        async function callGreet() {
+
+            try {
+
+                const name =
+                    document
+                        .getElementById('nameInput')
+                        .value
+                    || 'Guest';
+
+
+                const res =
+                    await fetch(
+                        `/greet?name=${encodeURIComponent(name)}`
+                    );
+
+
+                await handleResponse(
+                    res,
+                    'emitterOutput'
+                );
+
+
+                log(
+                    `GET /greet -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('emitterOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // EXIT EVENT
+        // =====================================
+
+        async function callExit() {
+
+            try {
+
+                const res =
+                    await fetch('/exit');
+
+
+                await handleResponse(
+                    res,
+                    'emitterOutput'
+                );
+
+
+                log(
+                    `GET /exit -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('emitterOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // 2. DOM EVENT
+        // =====================================
+
+        const domBtn =
+            document.getElementById('domBtn');
+
+
+        const domOutput =
+            document.getElementById('domOutput');
+
+
+        // Normal click event
+
+        domBtn.addEventListener(
+            'click',
+            () => {
+
+                domOutput.textContent =
+                    'Native click event detected!';
+
+
+                // Create custom event
+
+                const myEvent =
+                    new CustomEvent(
+                        'studentClicked',
+                        {
+                            detail: {
+                                time:
+                                    new Date()
+                                    .toLocaleTimeString()
+                            }
+                        }
+                    );
+
+
+                // Fire custom event
+
+                domBtn.dispatchEvent(myEvent);
+
+            }
+        );
+
+
+        // Listen to custom event
+
+        domBtn.addEventListener(
+            'studentClicked',
+            (event) => {
+
+                domOutput.textContent +=
+                    '\nCustom event fired at: ' +
+                    event.detail.time;
+
+            }
+        );
+
+
+
+        // =====================================
+        // 3. EVENT LOOP
+        // =====================================
+
+        async function runEventLoop() {
+
+            try {
+
+                document
+                    .getElementById('eventLoopOutput')
+                    .textContent =
+                        'Running...';
+
+
+                const res =
+                    await fetch('/eventloop');
+
+
+                const data =
+                    await res.json();
+
+
+                document
+                    .getElementById('eventLoopOutput')
+                    .textContent =
+                        data.order.join('\n');
+
+
+                log(
+                    `GET /eventloop -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('eventLoopOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // 4. CREATE FILE
+        // =====================================
+
+        async function createFile() {
+
+            try {
+
+                const text =
+                    document
+                        .getElementById('fileText')
+                        .value;
+
+
+                const res =
+                    await fetch(
+                        '/create',
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    text: text
+                                })
+                        }
+                    );
+
+
+                await handleResponse(
+                    res,
+                    'fileOutput'
+                );
+
+
+                log(
+                    `POST /create -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('fileOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // READ FILE
+        // =====================================
+
+        async function readFile() {
+
+            try {
+
+                const res =
+                    await fetch('/read');
+
+
+                await handleResponse(
+                    res,
+                    'fileOutput'
+                );
+
+
+                log(
+                    `GET /read -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('fileOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // UPDATE FILE
+        // =====================================
+
+        async function updateFile() {
+
+            try {
+
+                const text =
+                    document
+                        .getElementById('fileText')
+                        .value;
+
+
+                const res =
+                    await fetch(
+                        '/update',
+                        {
+                            method: 'PUT',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    text: text
+                                })
+                        }
+                    );
+
+
+                await handleResponse(
+                    res,
+                    'fileOutput'
+                );
+
+
+                log(
+                    `PUT /update -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('fileOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+
+
+        // =====================================
+        // DELETE FILE
+        // =====================================
+
+        async function deleteFile() {
+
+            try {
+
+                const res =
+                    await fetch(
+                        '/delete',
+                        {
+                            method: 'DELETE'
+                        }
+                    );
+
+
+                await handleResponse(
+                    res,
+                    'fileOutput'
+                );
+
+
+                log(
+                    `DELETE /delete -> ${res.status}`
+                );
+
+            }
+
+            catch (error) {
+
+                document
+                    .getElementById('fileOutput')
+                    .textContent =
+                        'Error: ' + error.message;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

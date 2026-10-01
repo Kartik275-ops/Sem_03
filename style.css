@@ -1,0 +1,27 @@
+body{
+   
+    background-color: skyblue;
+}
+
+p{
+    color: yellow;
+    font-size: 18px;
+}
+
+h1{
+  color: red;
+  
+}
+
+h1:hover{
+    font-size: 80px;
+}
+
+
+
+
+
+.container{
+    border: 2px solid black;
+    border-radius: 10px;
+}
